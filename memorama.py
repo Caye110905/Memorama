@@ -49,8 +49,8 @@ def tablero():
     print()
 
     cartas = ["🍎", "🍌", "🍓", "🍇", "🍒", "🍍", "🍉", "🍑", "🍋", "🍈", "🥑", "🥕", "🥦", "🥥", "🥭"]
-    
-    pares_cartas = (cartas * 2)[:posiciones_tablero]
+
+    pares_cartas = cartas[:posiciones_tablero // 2] * 2
     random.shuffle(pares_cartas)
 
     tablero_oculto = []
