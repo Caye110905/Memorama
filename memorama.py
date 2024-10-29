@@ -4,7 +4,6 @@ def menu():
     print("1. Persona vs Persona")
     print("2. Persona vs Máquina")
     print("3. Máquina vs Máquina")
-    print("4. Salir") 
     while True:
         opcion = int(input("Elige una opción (1-3): "))
         if opcion == 1:
@@ -23,4 +22,29 @@ def menu():
             print("Error: elige una opción válida (1, 2 o 3).")
 
 menu()
+
+def tablero():
+    while True:
+        filas = int(input("Elige el número de filas (2-6): "))
+        columnas = int(input("Elige el número de columnas (2-6): "))
+        posiciones_tablero = filas * columnas
+
+        if posiciones_tablero < 4 or posiciones_tablero > 36 or posiciones_tablero % 2 != 0:
+            print("Error: El número de filas y columnas debe ser par y entre 4 y 36. Intentalo de nuevo.")
+        else:
+            break
+
+    tablero = []
+    for i in range(filas):
+        fila = []
+        for j in range(columnas):
+            fila.append("*")
+        tablero.append(fila)
+
+    print("Tablero creado(las cartas estan boca abajo): ")
+    for fila in tablero:
+        print(" ".join(fila))
+    print()
+
+tablero()
 
