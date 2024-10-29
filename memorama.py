@@ -1,3 +1,5 @@
+import random
+
 def menu():
     print("Bienvenido a Memorama")
     print("Selecciona el modo de juego:")
@@ -29,8 +31,8 @@ def tablero():
         columnas = int(input("Elige el número de columnas (2-6): "))
         posiciones_tablero = filas * columnas
 
-        if posiciones_tablero < 4 or posiciones_tablero > 36 or posiciones_tablero % 2 != 0:
-            print("Error: El número de filas y columnas debe ser par y entre 4 y 36. Intentalo de nuevo.")
+        if posiciones_tablero < 4 or posiciones_tablero > 30 or posiciones_tablero % 2 != 0:
+            print("Error: El número de filas y columnas debe ser par y entre 4 y 30. Intentalo de nuevo.")
         else:
             break
 
@@ -41,8 +43,27 @@ def tablero():
             fila.append("*")
         tablero.append(fila)
 
-    print("Tablero creado(las cartas estan boca abajo): ")
+    print("Tablero creado con las cartas boca abajo: ")
     for fila in tablero:
+        print(" ".join(fila))
+    print()
+
+    cartas = ["🍎", "🍌", "🍓", "🍇", "🍒", "🍍", "🍉", "🍑", "🍋", "🍈", "🥑", "🥕", "🥦", "🥥", "🥭"]
+    
+    pares_cartas = (cartas * 2)[:posiciones_tablero]
+    random.shuffle(pares_cartas)
+
+    tablero_oculto = []
+    cont = 0
+    for i in range(filas):
+        fila = []
+        for j in range(columnas):
+            fila.append(pares_cartas[cont])
+            cont += 1
+        tablero_oculto.append(fila)
+
+    print("Tablero creado con las cartas visibles: ")
+    for fila in tablero_oculto:
         print(" ".join(fila))
     print()
 
