@@ -73,6 +73,39 @@ def memorama():
                 return fila, columna
             else:
                 print("Esas posiciones de la fila o la columna no se encunetran en el tablero. Inténtalo de nuevo.")
+                
+    cartas_ocultas = True
+    while cartas_ocultas:
+        cartas_ocultas = False
+        for fila in tablero:
+            if "*" in fila:
+                cartas_ocultas = True
+                break
+
+        print("Turno de " +primer_jugador)
+        mostrar_tablero(tablero)
+        
+    fila1, col1 = jugadorvsjugador(primer_jugador)
+    tablero[fila1][col1] = tablero_oculto[fila1][col1]
+    mostrar_tablero(tablero)
+    fila2, col2 = jugadorvsjugador(primer_jugador)
+    tablero[fila2][col2] = tablero_oculto[fila2][col2]
+    mostrar_tablero(tablero)
+    
+    if tablero[fila1][col1] == tablero[fila2][col2]:
+        print("¡Par encontrado!")
+        if primer_jugador == jugador1:
+            jugador1_puntuacion += 1
+        else:
+            jugador2_puntuacion += 1
+    else:
+        print("No coincidieron. Se ocultan las cartas.")
+        tablero[fila1][col1] = "*"
+        tablero[fila2][col2] = "*"
+        if primer_jugador == jugador1:
+            primer_jugador = jugador2
+        else:
+            primer_jugador = jugador1
 
     print("Juego terminado.")
     mostrar_tablero(tablero)
