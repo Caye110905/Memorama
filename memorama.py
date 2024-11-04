@@ -35,11 +35,11 @@ def memorama():
             print("Error: El número de filas y columnas debe ser par y entre 4 y 30. Inténtalo de nuevo.")
         else:
             break
-
+    
     tablero = []
-    for i in range(filas):
+    for _ in range(filas):
         fila = []
-        for j in range(columnas):
+        for _ in range(columnas):
             fila.append("*")
         tablero.append(fila)
     
@@ -60,20 +60,21 @@ def memorama():
         for fila in tablero:
             print(" ".join(fila))
         print()
-    
+
     jugador1_puntuacion = 0
     jugador2_puntuacion = 0
     primer_jugador = jugador1
 
     def jugadorvsjugador(jugador):
         while True:
-            fila = int(input(jugador + " elige la fila de la carta: "))
-            columna = int(input(jugador + " elige la columna de la carta: "))
-            if 1 <= fila < filas and 1 <= columna < columnas:
+            fila = int(input(jugador + " elige la fila de la carta: ")) - 1
+            columna = int(input(jugador + " elige la columna de la carta: ")) - 1
+            if 0 <= fila < filas and 0 <= columna < columnas:
                 return fila, columna
             else:
-                print("Esas posiciones de la fila o la columna no se encunetran en el tablero. Inténtalo de nuevo.")
-                
+                print("Esa posición no se encuentra en el tablero o ya ha sido seleccionada. Inténtalo de nuevo.")
+
+    # Bucle principal del juego
     cartas_ocultas = True
     while cartas_ocultas:
         cartas_ocultas = False
@@ -84,41 +85,44 @@ def memorama():
 
         print("Turno de " +primer_jugador)
         mostrar_tablero(tablero)
-        
-    fila1, col1 = jugadorvsjugador(primer_jugador)
-    tablero[fila1][col1] = tablero_oculto[fila1][col1]
-    mostrar_tablero(tablero)
-    fila2, col2 = jugadorvsjugador(primer_jugador)
-    tablero[fila2][col2] = tablero_oculto[fila2][col2]
-    mostrar_tablero(tablero)
-    
-    if tablero[fila1][col1] == tablero[fila2][col2]:
-        print("¡Par encontrado!")
-        if primer_jugador == jugador1:
-            jugador1_puntuacion += 1
+
+        # Selección de la primera carta
+        fila1, col1 = jugadorvsjugador(primer_jugador)
+        tablero[fila1][col1] = tablero_oculto[fila1][col1]
+        mostrar_tablero(tablero)
+
+        # Selección de la segunda carta
+        fila2, col2 = jugadorvsjugador(primer_jugador)
+        tablero[fila2][col2] = tablero_oculto[fila2][col2]
+        mostrar_tablero(tablero)
+
+        # Verificar si las cartas coinciden
+        if tablero[fila1][col1] == tablero[fila2][col2]:
+            print("¡Par encontrado!")
+            if primer_jugador == jugador1:
+                jugador1_puntuacion += 1
+            else:
+                jugador2_puntuacion += 1
         else:
-            jugador2_puntuacion += 1
-    else:
-        print("No coincidieron. Se ocultan las cartas.")
-        tablero[fila1][col1] = "*"
-        tablero[fila2][col2] = "*"
-        if primer_jugador == jugador1:
-            primer_jugador = jugador2
-        else:
-            primer_jugador = jugador1
+            print("No coincidieron. Se ocultan las cartas.")
+            tablero[fila1][col1] = "*"
+            tablero[fila2][col2] = "*"
+            # Cambiar de turno
+            if primer_jugador == jugador1:
+                primer_jugador = jugador2
+            else:
+                primer_jugador = jugador1
 
     print("Juego terminado.")
     mostrar_tablero(tablero)
     print("Puntajes finales:")
     print(jugador1 + " : " + jugador1_puntuacion + " puntos")
     print(jugador2 + " : " + jugador2_puntuacion + " puntos")
-    if jugador1_puntuacion[jugador1] > jugador2_puntuacion[jugador2]:
+    if jugador1_puntuacion > jugador2_puntuacion:
         print(jugador1 + " gana el juego")
-    elif jugador2_puntuacion[jugador2] > jugador1_puntuacion[jugador1]:
+    elif jugador2_puntuacion > jugador1_puntuacion:
         print(jugador2 + " gana el juego")
     else:
         print("¡Es un empate!")
 
 memorama()
-
-
