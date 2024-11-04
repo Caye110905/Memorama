@@ -35,14 +35,9 @@ def memorama():
             print("Error: El número de filas y columnas debe ser par y entre 4 y 30. Inténtalo de nuevo.")
         else:
             break
-    
-    tablero = []
-    for _ in range(filas):
-        fila = []
-        for _ in range(columnas):
-            fila.append("*")
-        tablero.append(fila)
-    
+
+    tablero = [["*" for _ in range(columnas)] for _ in range(filas)]
+
     cartas = ["🍎", "🍌", "🍓", "🍇", "🍒", "🍍", "🍉", "🍑", "🍋", "🍈", "🥑", "🥕", "🥦", "🥥", "🥭"]
     pares_cartas = cartas[:(filas * columnas) // 2] * 2
     random.shuffle(pares_cartas)
@@ -56,68 +51,75 @@ def memorama():
             cont += 1
         tablero_oculto.append(fila)
 
-    def mostrar_tablero(tablero):
-        for fila in tablero:
-            print(" ".join(fila))
-        print()
-
     jugador1_puntuacion = 0
     jugador2_puntuacion = 0
     primer_jugador = jugador1
 
-    def jugadorvsjugador(jugador):
-        while True:
-            fila = int(input(jugador + " elige la fila de la carta: ")) - 1
-            columna = int(input(jugador + " elige la columna de la carta: ")) - 1
-            if 0 <= fila < filas and 0 <= columna < columnas:
-                return fila, columna
-            else:
-                print("Esa posición no se encuentra en el tablero o ya ha sido seleccionada. Inténtalo de nuevo.")
-
-    # Bucle principal del juego
-    cartas_ocultas = True
-    while cartas_ocultas:
-        cartas_ocultas = False
+    asteriscos = True
+    while asteriscos:
+        print("Turno de " + primer_jugador)
+        
         for fila in tablero:
-            if "*" in fila:
-                cartas_ocultas = True
+            print(" ".join(fila))
+        print()
+
+        while True:
+            fila1 = int(input(primer_jugador + " elige la fila de la carta: ")) - 1
+            columna1 = int(input(primer_jugador + " elige la columna de la carta: ")) - 1
+            if 0 <= fila1 < filas and 0 <= columna1 < columnas:
                 break
+            else:
+                print("Posición inválida o ya descubierta. Inténtalo de nuevo.")
 
-        print("Turno de " +primer_jugador)
-        mostrar_tablero(tablero)
+        tablero[fila1][columna1] = tablero_oculto[fila1][columna1]
+        for fila in tablero:
+            print(" ".join(fila))
+        print()
 
-        # Selección de la primera carta
-        fila1, col1 = jugadorvsjugador(primer_jugador)
-        tablero[fila1][col1] = tablero_oculto[fila1][col1]
-        mostrar_tablero(tablero)
+        while True:
+            fila2 = int(input(primer_jugador + " elige la fila de la carta: ")) - 1
+            columna2 = int(input(primer_jugador + " elige la columna de la carta: ")) - 1
+            if 0 <= fila2 < filas and 0 <= columna2 < columnas:
+                break
+            else:
+                print("Posición inválida o ya descubierta. Inténtalo de nuevo.")
 
-        # Selección de la segunda carta
-        fila2, col2 = jugadorvsjugador(primer_jugador)
-        tablero[fila2][col2] = tablero_oculto[fila2][col2]
-        mostrar_tablero(tablero)
+        tablero[fila2][columna2] = tablero_oculto[fila2][columna2]
+        for fila in tablero:
+            print(" ".join(fila))
+        print()
+        print("Las posiciones no son válidas. Inténtalo de nuevo.")
+        print("\n")
+        menu()
 
-        # Verificar si las cartas coinciden
-        if tablero[fila1][col1] == tablero[fila2][col2]:
+        if tablero[fila1][columna1] == tablero[fila2][columna2]:
             print("¡Par encontrado!")
             if primer_jugador == jugador1:
-                jugador1_puntuacion += 1
+                jugador1_puntuacion += 2
             else:
-                jugador2_puntuacion += 1
+                jugador2_puntuacion += 2
         else:
             print("No coincidieron. Se ocultan las cartas.")
-            tablero[fila1][col1] = "*"
-            tablero[fila2][col2] = "*"
-            # Cambiar de turno
+            tablero[fila1][columna1] = "*"
+            tablero[fila2][columna2] = "*"
             if primer_jugador == jugador1:
                 primer_jugador = jugador2
             else:
                 primer_jugador = jugador1
 
+        asteriscos = False
+        for fila in tablero:
+            if "*" in fila:
+                asteriscos = True
+                break
+
     print("Juego terminado.")
-    mostrar_tablero(tablero)
-    print("Puntajes finales:")
-    print(jugador1 + " : " + jugador1_puntuacion + " puntos")
-    print(jugador2 + " : " + jugador2_puntuacion + " puntos")
+    for fila in tablero:
+        print(" ".join(fila))
+    print("Puntaciones finales:")
+    print(jugador1, ":", jugador1_puntuacion, "puntos")
+    print(jugador2, ":", jugador2_puntuacion, "puntos")
+    
     if jugador1_puntuacion > jugador2_puntuacion:
         print(jugador1 + " gana el juego")
     elif jugador2_puntuacion > jugador1_puntuacion:
