@@ -39,7 +39,7 @@ def memorama():
     tablero = [["*" for _ in range(columnas)] for _ in range(filas)]
 
     cartas = ["🍎", "🍌", "🍓", "🍇", "🍒", "🍍", "🍉", "🍑", "🍋", "🍈", "🥑", "🥕", "🥦", "🥥", "🥭"]
-    pares_cartas = cartas[:(filas * columnas) // 2] * 2
+    pares_cartas = cartas[:posiciones_tablero // 2] * 2
     random.shuffle(pares_cartas)
 
     tablero_oculto = []
@@ -66,7 +66,7 @@ def memorama():
         while True:
             fila1 = int(input(primer_jugador + " elige la fila de la carta: ")) - 1
             columna1 = int(input(primer_jugador + " elige la columna de la carta: ")) - 1
-            if 0 <= fila1 < filas and 0 <= columna1 < columnas:
+            if 0 <= fila1 < filas and 0 <= columna1 < columnas and tablero[fila1][columna1] == "*":
                 break
             else:
                 print("Posición inválida o ya descubierta. Inténtalo de nuevo.")
@@ -79,7 +79,7 @@ def memorama():
         while True:
             fila2 = int(input(primer_jugador + " elige la fila de la carta: ")) - 1
             columna2 = int(input(primer_jugador + " elige la columna de la carta: ")) - 1
-            if 0 <= fila2 < filas and 0 <= columna2 < columnas:
+            if 0 <= fila2 < filas and 0 <= columna2 < columnas and tablero[fila2][columna2] == "*":
                 break
             else:
                 print("Posición inválida o ya descubierta. Inténtalo de nuevo.")
@@ -88,9 +88,6 @@ def memorama():
         for fila in tablero:
             print(" ".join(fila))
         print()
-        print("Las posiciones no son válidas. Inténtalo de nuevo.")
-        print("\n")
-        menu()
 
         if tablero[fila1][columna1] == tablero[fila2][columna2]:
             print("¡Par encontrado!")
