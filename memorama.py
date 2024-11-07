@@ -25,6 +25,7 @@ def menu():
 
 def memorama():
     jugador1, jugador2 = menu()
+    memoria_maquina = {}
 
     while True:
         filas = int(input("Elige el número de filas (2-6): "))
@@ -63,28 +64,106 @@ def memorama():
             print(" ".join(fila))
         print()
 
-        while True:
-            fila1 = int(input(primer_jugador + " elige la fila de la carta: ")) - 1
-            columna1 = int(input(primer_jugador + " elige la columna de la carta: ")) - 1
-            if 0 <= fila1 < filas and 0 <= columna1 < columnas and tablero[fila1][columna1] == "*":
-                break
-            else:
-                print("Posición inválida o ya descubierta. Inténtalo de nuevo.")
+        if primer_jugador == "Máquina":
+            posiciones_disponibles = []
+            for i in range(filas):
+                for j in range(columnas):
+                    if tablero[i][j] == "*":
+                        posiciones_disponibles.append((i, j))
+            
+            par_encontrado = False
+            posicion1 = 0
+            posicion2 = 0
+            for i in range(len(memoria_maquina)):
+                for j in range(len(memoria_maquina)):
+                    if posicion1 != posicion2:
+                        carta1 = memoria_maquina[i]
+                        carta2 = memoria_maquina[j]
+                        
+                        if (posicion1 != posicion2 and
+                            carta1 == carta2 and
+                            tablero[posicion1][posicion2] == "*" and
+                            tablero[posicion1][posicion2] == "*"):
+                            
+                            fila1 = posicion1
+                            columna1 = posicion2
+                            par_encontrado = True
+                            break
+                if par_encontrado:
+                    break
+            
+            if not par_encontrado:
+                while True:
+                    fila1 = random.randint(0, filas - 1)
+                    columna1 = random.randint(0, columnas - 1)
+                    if tablero[fila1][columna1] == "*":
+                        break
+            
+            print(primer_jugador, "elige la posición : " ,fila1 + 1, ",", columna1 + 1)
+        else:
+            while True:
+                fila1 = int(input(primer_jugador + " elige la fila de la carta: ")) - 1
+                columna1 = int(input(primer_jugador + " elige la columna de la carta: ")) - 1
+                if 0 <= fila1 < filas and 0 <= columna1 < columnas and tablero[fila1][columna1] == "*":
+                    break
+                else:
+                    print("Posición inválida o ya descubierta. Inténtalo de nuevo.")
 
         tablero[fila1][columna1] = tablero_oculto[fila1][columna1]
+        if primer_jugador == "Máquina":
+            memoria_maquina[(fila2, columna2)] = tablero_oculto[fila2][columna2]
         for fila in tablero:
             print(" ".join(fila))
         print()
 
-        while True:
-            fila2 = int(input(primer_jugador + " elige la fila de la carta: ")) - 1
-            columna2 = int(input(primer_jugador + " elige la columna de la carta: ")) - 1
-            if 0 <= fila2 < filas and 0 <= columna2 < columnas and tablero[fila2][columna2] == "*":
-                break
-            else:
-                print("Posición inválida o ya descubierta. Inténtalo de nuevo.")
+        if primer_jugador == "Máquina":
+            posiciones_disponibles = []
+            for i in range(filas):
+                for j in range(columnas):
+                    if tablero[i][j] == "*":
+                        posiciones_disponibles.append((i, j))
+            
+            par_encontrado = False
+            posicion1 = 0
+            posicion2 = 0
+            for i in range(len(memoria_maquina)):
+                for j in range(len(memoria_maquina)):
+                    if posicion1 != posicion2:
+                        carta1 = memoria_maquina[i]
+                        carta2 = memoria_maquina[j]
+                        
+                        if (posicion1 != posicion2 and
+                            carta1 == carta2 and
+                            tablero[posicion1][posicion2] == "*" and
+                            tablero[posicion1][posicion2] == "*"):
+                            
+                            fila2 = posicion1
+                            columna2 = posicion2
+                            par_encontrado = True
+                            break
+                if par_encontrado:
+                    break
+            
+            if not par_encontrado:
+                while True:
+                    fila2 = random.randint(0, filas - 1)
+                    columna2 = random.randint(0, columnas - 1)
+                    if tablero[fila2][columna2] == "*":
+                        break
+            
+            print(primer_jugador, "elige la posición : " ,fila2 + 1, ",", columna2 + 1)
+        else:
+            while True:
+                fila2 = int(input(primer_jugador + " elige la fila de la carta: ")) - 1
+                columna2 = int(input(primer_jugador + " elige la columna de la carta: ")) - 1
+                if 0 <= fila2 < filas and 0 <= columna2 < columnas and tablero[fila2][columna2] == "*":
+                    break
+                else:
+                    print("Posición inválida o ya descubierta. Inténtalo de nuevo.")
 
         tablero[fila2][columna2] = tablero_oculto[fila2][columna2]
+        if primer_jugador == "Máquina":
+            memoria_maquina[(fila2, columna2)] = tablero_oculto[fila2][columna2]
         for fila in tablero:
             print(" ".join(fila))
         print()
