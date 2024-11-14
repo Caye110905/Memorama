@@ -25,7 +25,8 @@ def menu():
 
 def memorama():
     jugador1, jugador2 = menu()
-    memoria_maquina = {}
+    memoria_maquina1 = {}
+    memoria_maquina2 = {}
 
     while True:
         filas = int(input("Elige el número de filas (2-6): "))
@@ -55,7 +56,7 @@ def memorama():
     jugador1_puntuacion = 0
     jugador2_puntuacion = 0
     primer_jugador = jugador1
-
+    
     asteriscos = True
     while asteriscos:
         print("Turno de " + primer_jugador)
@@ -63,32 +64,21 @@ def memorama():
         for fila in tablero:
             print(" ".join(fila))
         print()
-
-        if primer_jugador == "Máquina":
-            posiciones_disponibles = []
-            for i in range(filas):
-                for j in range(columnas):
-                    if tablero[i][j] == "*":
-                        posiciones_disponibles.append((i, j))
-            
+        
+        # Selección de la primera carta
+        if primer_jugador.startswith("Máquina"):
+            if primer_jugador == "Máquina 1":
+                memoria_actual = memoria_maquina1
+            else:
+                memoria_actual = memoria_maquina2
+            # Buscar pares en memoria
             par_encontrado = False
-            posicion1 = 0
-            posicion2 = 0
-            for i in range(len(memoria_maquina)):
-                for j in range(len(memoria_maquina)):
-                    if posicion1 != posicion2:
-                        carta1 = memoria_maquina[i]
-                        carta2 = memoria_maquina[j]
-                        
-                        if (posicion1 != posicion2 and
-                            carta1 == carta2 and
-                            tablero[posicion1][posicion2] == "*" and
-                            tablero[posicion1][posicion2] == "*"):
-                            
-                            fila1 = posicion1
-                            columna1 = posicion2
-                            par_encontrado = True
-                            break
+            for posicion1, carta1 in memoria_actual.items():
+                for posicion2, carta2 in memoria_actual.items():
+                    if posicion1 != posicion2 and carta1 == carta2 and tablero[posicion1[0]][posicion1[1]] == "*" and tablero[posicion2[0]][posicion2[1]] == "*":
+                        fila1, columna1 = posicion1
+                        par_encontrado = True
+                        break
                 if par_encontrado:
                     break
             
@@ -98,7 +88,6 @@ def memorama():
                     columna1 = random.randint(0, columnas - 1)
                     if tablero[fila1][columna1] == "*":
                         break
-            
             print(primer_jugador, "elige la posición : " ,fila1 + 1, ",", columna1 + 1)
         else:
             while True:
@@ -108,49 +97,32 @@ def memorama():
                     break
                 else:
                     print("Posición inválida o ya descubierta. Inténtalo de nuevo.")
-
+        
+        # Mostrar primera carta
         tablero[fila1][columna1] = tablero_oculto[fila1][columna1]
         if primer_jugador == "Máquina":
-            memoria_maquina[(fila2, columna2)] = tablero_oculto[fila2][columna2]
+            memoria_actual[(fila2, columna2)] = tablero_oculto[fila2][columna2]
+        
         for fila in tablero:
             print(" ".join(fila))
         print()
-
-        if primer_jugador == "Máquina":
-            posiciones_disponibles = []
-            for i in range(filas):
-                for j in range(columnas):
-                    if tablero[i][j] == "*":
-                        posiciones_disponibles.append((i, j))
-            
+        
+        # Selección de la segunda carta
+        if primer_jugador.startswith("Máquina"):
             par_encontrado = False
-            posicion1 = 0
-            posicion2 = 0
-            for i in range(len(memoria_maquina)):
-                for j in range(len(memoria_maquina)):
-                    if posicion1 != posicion2:
-                        carta1 = memoria_maquina[i]
-                        carta2 = memoria_maquina[j]
-                        
-                        if (posicion1 != posicion2 and
-                            carta1 == carta2 and
-                            tablero[posicion1][posicion2] == "*" and
-                            tablero[posicion1][posicion2] == "*"):
-                            
-                            fila2 = posicion1
-                            columna2 = posicion2
-                            par_encontrado = True
-                            break
-                if par_encontrado:
+            carta1 = tablero_oculto[fila1][columna1]
+            for posicion, carta in memoria_actual.items():
+                if posicion != (fila1, columna1) and carta == carta1 and tablero[posicion[0]][posicion[1]] == "*":  
+                    fila2, columna2 = posicion
+                    par_encontrado = True
                     break
             
             if not par_encontrado:
                 while True:
                     fila2 = random.randint(0, filas - 1)
                     columna2 = random.randint(0, columnas - 1)
-                    if tablero[fila2][columna2] == "*":
+                    if tablero[fila2][columna2] == "*" and (fila2, columna2) != (fila1, columna1):
                         break
-            
             print(primer_jugador, "elige la posición : " ,fila2 + 1, ",", columna2 + 1)
         else:
             while True:
@@ -160,14 +132,16 @@ def memorama():
                     break
                 else:
                     print("Posición inválida o ya descubierta. Inténtalo de nuevo.")
-
+        
+        # Mostrar segunda carta
         tablero[fila2][columna2] = tablero_oculto[fila2][columna2]
         if primer_jugador == "Máquina":
-            memoria_maquina[(fila2, columna2)] = tablero_oculto[fila2][columna2]
+            memoria_actual[(fila2, columna2)] = tablero_oculto[fila2][columna2]
+        
         for fila in tablero:
             print(" ".join(fila))
         print()
-
+        
         if tablero[fila1][columna1] == tablero[fila2][columna2]:
             print("¡Par encontrado!")
             if primer_jugador == jugador1:
@@ -175,23 +149,21 @@ def memorama():
             else:
                 jugador2_puntuacion += 2
         else:
-            print("No coincidieron. Se ocultan las cartas.")
+            print("No coinciden. Se ocultan las cartas")
             tablero[fila1][columna1] = "*"
             tablero[fila2][columna2] = "*"
             if primer_jugador == jugador1:
                 primer_jugador = jugador2
             else:
                 primer_jugador = jugador1
-
+        
         asteriscos = False
         for fila in tablero:
             if "*" in fila:
                 asteriscos = True
                 break
-
+    
     print("Juego terminado.")
-    for fila in tablero:
-        print(" ".join(fila))
     print("Puntaciones finales:")
     print(jugador1, ":", jugador1_puntuacion, "puntos")
     print(jugador2, ":", jugador2_puntuacion, "puntos")
