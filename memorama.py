@@ -65,13 +65,11 @@ def memorama():
             print(" ".join(fila))
         print()
         
-        # Selección de la primera carta
         if primer_jugador.startswith("Máquina"):
             if primer_jugador == "Máquina 1":
                 memoria_actual = memoria_maquina1
             else:
                 memoria_actual = memoria_maquina2
-            # Buscar pares en memoria
             par_encontrado = False
             for posicion1, carta1 in memoria_actual.items():
                 for posicion2, carta2 in memoria_actual.items():
@@ -98,7 +96,6 @@ def memorama():
                 else:
                     print("Posición inválida o ya descubierta. Inténtalo de nuevo.")
         
-        # Mostrar primera carta
         tablero[fila1][columna1] = tablero_oculto[fila1][columna1]
         if primer_jugador == "Máquina":
             memoria_actual[(fila2, columna2)] = tablero_oculto[fila2][columna2]
@@ -107,7 +104,6 @@ def memorama():
             print(" ".join(fila))
         print()
         
-        # Selección de la segunda carta
         if primer_jugador.startswith("Máquina"):
             par_encontrado = False
             carta1 = tablero_oculto[fila1][columna1]
@@ -133,7 +129,6 @@ def memorama():
                 else:
                     print("Posición inválida o ya descubierta. Inténtalo de nuevo.")
         
-        # Mostrar segunda carta
         tablero[fila2][columna2] = tablero_oculto[fila2][columna2]
         if primer_jugador == "Máquina":
             memoria_actual[(fila2, columna2)] = tablero_oculto[fila2][columna2]
